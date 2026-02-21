@@ -1,2 +1,2 @@
-# cringe
-Container Runtime INtrospection Graph Executor
+# CRINGE
+Container Runtime INspection Ginkgo Executor
