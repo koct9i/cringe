@@ -7,8 +7,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/go-logr/logr"
 	"log/slog"
+
+	"github.com/go-logr/logr"
 
 	"github.com/urfave/cli/v3"
 

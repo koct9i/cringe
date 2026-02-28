@@ -4,8 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/go-logr/logr"
 	"log/slog"
+
+	"github.com/go-logr/logr"
 
 	grpclogging "github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
 	"google.golang.org/grpc"

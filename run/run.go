@@ -24,7 +24,7 @@ func (fakeT) Fail() {
 func HashCurrentSpec() int64 {
 	h := hashfnv.New64a()
 	h.Write([]byte(strings.Join(ginkgo.CurrentSpecReport().ContainerHierarchyTexts, "\n")))
-	return int64(h.Sum64())
+	return int64(h.Sum64()) //nolint:gosec
 }
 
 func NewSeededRand() *rand.Rand {

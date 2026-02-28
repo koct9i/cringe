@@ -13,8 +13,7 @@ var _ = Context("Dummy", Label("dummy"), func() {
 
 	It("Always succeed", Label("ok"), func() {
 		logger.Info("Hello")
-		Expect(true).NotTo(BeFalse())
-		Expect(false).NotTo(BeTrue())
+		Expect(1 + 1).To(Equal(2))
 	})
 
 	It("Always fails", Label("fail"), func() {

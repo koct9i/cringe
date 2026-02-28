@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+# https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions
+
+name: Lint
+
+on:
+  pull_request: {}
+  push: {}
+  workflow_call: {}
+  workflow_dispatch: {}
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # https://github.com/actions/checkout
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 1
+
+      # https://github.com/actions/setup-go
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+
+      # https://github.com/golangci/golangci-lint-action
+      - uses: golangci/golangci-lint-action@v9
+        with:
+          version: latest
