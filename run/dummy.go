@@ -3,9 +3,11 @@ package run
 import (
 	"context"
 	"math/rand"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	. "github.com/onsi/gomega/gmeasure"
 )
 
 var _ = Context("Dummy", Label("dummy"), func() {
@@ -40,5 +42,14 @@ var _ = Context("Dummy", Label("dummy"), func() {
 	It("Always stuck", Label("timeout"), func(ctx context.Context) {
 		logger.Info("Hello")
 		<-ctx.Done()
+	})
+
+	It("Measure randomness", Label("measure"), func() {
+		exp := NewExperiment("d6")
+		dice := NewSeededRand()
+		exp.SampleValue("roll", func(idx int) float64 {
+			return float64(dice.Intn(6) + 1)
+		}, SamplingConfig{N: 100, Duration: time.Second})
+		AddReportEntry(exp.Name, exp)
 	})
 })
