@@ -3,12 +3,12 @@ package run
 import (
 	"context"
 	hashfnv "hash/fnv"
-	"log/slog"
 	"math/rand"
 	"strings"
 	"time"
 
-	"github.com/go-logr/logr"
+	"github.com/koct9i/cringe/log"
+
 	"github.com/urfave/cli/v3"
 
 	"github.com/onsi/ginkgo/v2"
@@ -33,6 +33,9 @@ func NewSeededRand() *rand.Rand {
 
 func NewCommand() *cli.Command {
 	suiteConfig, reporterConfig := ginkgo.GinkgoConfiguration()
+	// reporterConfig.FullTrace = true
+	// reporterConfig.ShowNodeEvents = true
+	// suiteConfig.OutputInterceptorMode = "none"
 	return &cli.Command{
 		Name: "run",
 		Flags: []cli.Flag{
@@ -134,9 +137,7 @@ func NewCommand() *cli.Command {
 			},
 		},
 		Action: func(ctx context.Context, c *cli.Command) error {
-			ginkgo.GinkgoLogr = logr.FromSlogHandler(slog.NewJSONHandler(ginkgo.GinkgoWriter, &slog.HandlerOptions{
-				Level: slog.Level(-logr.FromContextOrDiscard(ctx).GetV()),
-			}))
+			ginkgo.GinkgoLogr = log.NewLogger(ginkgo.GinkgoWriter)
 			gomega.RegisterFailHandler(ginkgo.Fail)
 			if !ginkgo.RunSpecs(fakeT{}, "", suiteConfig, reporterConfig) {
 				return cli.Exit("", 1)

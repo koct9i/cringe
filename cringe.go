@@ -7,13 +7,13 @@ import (
 	"strings"
 	"time"
 
-	"log/slog"
-
 	"github.com/go-logr/logr"
 
 	"github.com/urfave/cli/v3"
 
 	"github.com/koct9i/cringe/cri"
+	"github.com/koct9i/cringe/log"
+	"github.com/koct9i/cringe/probe"
 	"github.com/koct9i/cringe/run"
 )
 
@@ -22,7 +22,6 @@ func main() {
 	defer stop()
 
 	var logger logr.Logger
-	var verbosity int
 
 	var timeout time.Duration
 	var ctxCancel func()
@@ -30,9 +29,14 @@ func main() {
 	command := cli.Command{
 		Flags: []cli.Flag{
 			&cli.IntFlag{
-				Name:        "verbosity",
+				Name:        "log-verbosity",
 				Aliases:     []string{"v"},
-				Destination: &verbosity,
+				Destination: &log.Verbosity,
+			},
+			&cli.BoolWithInverseFlag{
+				Name:        "log-pretty",
+				Value:       true,
+				Destination: &log.Pretty,
 			},
 			&cli.StringFlag{
 				Name:        "cri-address",
@@ -57,9 +61,7 @@ func main() {
 			if timeout > 0 {
 				ctx, ctxCancel = context.WithTimeout(ctx, timeout)
 			}
-			logger = logr.FromSlogHandler(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
-				Level: slog.Level(-verbosity),
-			}))
+			logger = log.NewLogger(os.Stdout)
 			ctx = logr.NewContext(ctx, logger)
 			return ctx, nil
 		},
@@ -72,6 +74,7 @@ func main() {
 		Commands: []*cli.Command{
 			cri.NewCommand(),
 			run.NewCommand(),
+			probe.NewCommand(),
 		},
 	}
 	args := append(strings.Split(os.Args[0], "__"), os.Args[1:]...)

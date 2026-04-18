@@ -4,6 +4,7 @@ go 1.25.7
 
 require (
 	github.com/Masterminds/semver/v3 v3.4.0
+	github.com/abrander/colorjson v0.0.0-20230613094054-36675efdd74f
 	github.com/go-logr/logr v1.4.3
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
 	github.com/onsi/ginkgo/v2 v2.28.1

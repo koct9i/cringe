@@ -86,6 +86,8 @@ func NewClient(address string, logger logr.Logger) (Client, error) {
 
 func grpcLogger(logger logr.Logger) grpclogging.Logger {
 	slogLogger := slog.New(logr.ToSlogHandler(logger))
+	logger.Info("Hello 0 from grpc")
+	logger.V(4).Info("Hello 4 from grpc")
 	return grpclogging.LoggerFunc(func(ctx context.Context, level grpclogging.Level, msg string, fields ...any) {
 		slogLogger.Log(ctx, slog.Level(level), msg, fields...)
 	})
